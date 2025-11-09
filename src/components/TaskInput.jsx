@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { playSound } from '../utils/soundEffects';
 import '../styles/taskinput.css';
 
 const TaskInput = ({ onTaskCreate, isLoading }) => {
@@ -9,7 +10,15 @@ const TaskInput = ({ onTaskCreate, isLoading }) => {
   const [tags, setTags] = useState('');
   const [speedrunMode, setSpeedrunMode] = useState(false);
   const [showAdvanced, setShowAdvanced] = useState(false);
-  
+
+  // Handle keyboard sounds
+  const handleKeyPress = (e) => {
+    // Only play sound for actual character keys, not modifiers
+    if (e.key.length === 1 || e.key === 'Backspace' || e.key === 'Delete') {
+      playSound('key');
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     
@@ -50,6 +59,7 @@ const TaskInput = ({ onTaskCreate, isLoading }) => {
             type="text"
             value={taskTitle}
             onChange={(e) => setTaskTitle(e.target.value)}
+            onKeyDown={handleKeyPress}
             placeholder="e.g., Pack clothes from suitcase"
             disabled={isLoading}
             className="task-input-field"
@@ -137,6 +147,7 @@ const TaskInput = ({ onTaskCreate, isLoading }) => {
                 type="text"
                 value={tags}
                 onChange={(e) => setTags(e.target.value)}
+                onKeyDown={handleKeyPress}
                 placeholder="e.g., home, urgent, chores"
                 disabled={isLoading}
                 className="task-input-field"

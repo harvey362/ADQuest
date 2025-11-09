@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { playSound } from '../utils/soundEffects';
 import '../styles/timetrainer.css';
 
 const TimeTrainer = () => {
@@ -10,6 +11,14 @@ const TimeTrainer = () => {
   const [results, setResults] = useState([]);
   const [stats, setStats] = useState({ total: 0, accuracy: 0, avgError: 0 });
   const intervalRef = useRef(null);
+
+  // Handle keyboard sounds
+  const handleKeyPress = (e) => {
+    // Only play sound for actual character keys, not modifiers
+    if (e.key.length === 1 || e.key === 'Backspace' || e.key === 'Delete') {
+      playSound('key');
+    }
+  };
 
   // Load results and stats
   useEffect(() => {
@@ -218,6 +227,7 @@ const TimeTrainer = () => {
                       placeholder="Enter seconds"
                       value={estimate}
                       onChange={(e) => setEstimate(e.target.value)}
+                      onKeyDown={handleKeyPress}
                       min="1"
                     />
                     <button className="submit-btn" onClick={submitEstimate}>

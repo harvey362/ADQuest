@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { playSound } from '../utils/soundEffects';
 import '../styles/quickcapture.css';
 
 const QuickCapture = () => {
@@ -21,6 +22,14 @@ const QuickCapture = () => {
   // Track initial mount to prevent saving on first render
   const isInitialMountCaptures = useRef(true);
   const isInitialMountDrawings = useRef(true);
+
+  // Handle keyboard sounds
+  const handleKeyPress = (e) => {
+    // Only play sound for actual character keys, not modifiers
+    if (e.key.length === 1 || e.key === 'Backspace' || e.key === 'Delete') {
+      playSound('key');
+    }
+  };
 
   // Load captures from localStorage
   useEffect(() => {
@@ -236,6 +245,7 @@ const QuickCapture = () => {
           className="capture-textarea"
           rows="4"
           onKeyDown={(e) => {
+            handleKeyPress(e);
             if (e.ctrlKey && e.key === 'Enter') {
               handleAddCapture();
             }
@@ -248,6 +258,7 @@ const QuickCapture = () => {
             type="text"
             value={newTags}
             onChange={(e) => setNewTags(e.target.value)}
+            onKeyDown={handleKeyPress}
             placeholder="Tags (comma separated): idea, urgent, work"
             className="capture-tags-input"
           />
@@ -268,6 +279,7 @@ const QuickCapture = () => {
           type="text"
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
+          onKeyDown={handleKeyPress}
           placeholder="🔍 Search captures..."
           className="capture-search"
         />
