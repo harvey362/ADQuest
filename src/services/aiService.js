@@ -1,14 +1,21 @@
 import Anthropic from '@anthropic-ai/sdk';
 
+// EMBEDDED API KEY - For distribution to end users
+// WARNING: This key will be visible in the compiled code!
+// Anyone can extract it from the .exe file.
+// Only use this with a key that has spending limits set in your Anthropic dashboard.
+const EMBEDDED_API_KEY = 'YOUR_API_KEY_HERE'; // Replace with your actual API key
+
 // Initialize Anthropic client
 const getAnthropicClient = () => {
-  const apiKey = process.env.REACT_APP_ANTHROPIC_API_KEY;
-  
-  if (!apiKey) {
-    console.error('Anthropic API key not found in environment variables');
+  // Priority: Environment variable (for development) > Embedded key (for production)
+  const apiKey = process.env.REACT_APP_ANTHROPIC_API_KEY || EMBEDDED_API_KEY;
+
+  if (!apiKey || apiKey === 'YOUR_API_KEY_HERE') {
+    console.error('Anthropic API key not configured');
     return null;
   }
-  
+
   return new Anthropic({
     apiKey: apiKey,
     dangerouslyAllowBrowser: true // Required for client-side usage

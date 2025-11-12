@@ -143,20 +143,24 @@ class SoundEffects {
   playTone(frequency, duration, type = 'sine', volume = 0.3) {
     if (!this.audioContext) return;
 
-    const oscillator = this.audioContext.createOscillator();
-    const gainNode = this.audioContext.createGain();
+    try {
+      const oscillator = this.audioContext.createOscillator();
+      const gainNode = this.audioContext.createGain();
 
-    oscillator.connect(gainNode);
-    gainNode.connect(this.audioContext.destination);
+      oscillator.connect(gainNode);
+      gainNode.connect(this.audioContext.destination);
 
-    oscillator.type = type;
-    oscillator.frequency.value = frequency;
+      oscillator.type = type;
+      oscillator.frequency.value = frequency;
 
-    gainNode.gain.setValueAtTime(volume, this.audioContext.currentTime);
-    gainNode.gain.exponentialRampToValueAtTime(0.01, this.audioContext.currentTime + duration);
+      gainNode.gain.setValueAtTime(volume, this.audioContext.currentTime);
+      gainNode.gain.exponentialRampToValueAtTime(0.01, this.audioContext.currentTime + duration);
 
-    oscillator.start(this.audioContext.currentTime);
-    oscillator.stop(this.audioContext.currentTime + duration);
+      oscillator.start(this.audioContext.currentTime);
+      oscillator.stop(this.audioContext.currentTime + duration);
+    } catch (e) {
+      console.warn('Error playing tone:', e);
+    }
   }
 
   /**
@@ -181,26 +185,36 @@ class SoundEffects {
    * Keyboard typing sounds
    */
   keyTypewriter() {
-    // Classic typewriter sound
-    const oscillator = this.audioContext.createOscillator();
-    const gainNode = this.audioContext.createGain();
+    if (!this.audioContext) return;
 
-    oscillator.connect(gainNode);
-    gainNode.connect(this.audioContext.destination);
+    try {
+      // Classic typewriter sound
+      const oscillator = this.audioContext.createOscillator();
+      const gainNode = this.audioContext.createGain();
 
-    oscillator.type = 'square';
-    oscillator.frequency.value = 200;
+      oscillator.connect(gainNode);
+      gainNode.connect(this.audioContext.destination);
 
-    gainNode.gain.setValueAtTime(0.2, this.audioContext.currentTime);
-    gainNode.gain.exponentialRampToValueAtTime(0.01, this.audioContext.currentTime + 0.05);
+      oscillator.type = 'square';
+      oscillator.frequency.value = 200;
 
-    oscillator.start(this.audioContext.currentTime);
-    oscillator.stop(this.audioContext.currentTime + 0.05);
+      gainNode.gain.setValueAtTime(0.2, this.audioContext.currentTime);
+      gainNode.gain.exponentialRampToValueAtTime(0.01, this.audioContext.currentTime + 0.05);
 
-    // Add metallic ping
-    setTimeout(() => {
-      this.playTone(1200, 0.02, 'triangle', 0.1);
-    }, 20);
+      oscillator.start(this.audioContext.currentTime);
+      oscillator.stop(this.audioContext.currentTime + 0.05);
+
+      // Add metallic ping
+      setTimeout(() => {
+        try {
+          this.playTone(1200, 0.02, 'triangle', 0.1);
+        } catch (e) {
+          console.warn('Error playing typewriter ping:', e);
+        }
+      }, 20);
+    } catch (e) {
+      console.warn('Error playing typewriter sound:', e);
+    }
   }
 
   keyThock() {

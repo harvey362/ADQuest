@@ -400,13 +400,14 @@ const Dashboard = ({ onCompleteQuest, settings }) => {
       />
       
       {showLevelUpModal && levelUpData && (
-        <div className="level-up-modal">
-          <div className="level-up-content">
+        <div className="level-up-modal" onClick={() => setShowLevelUpModal(false)}>
+          <div className="level-up-content" onClick={(e) => e.stopPropagation()}>
             <h2 className="level-up-title">⚡ LEVEL UP! ⚡</h2>
             <p className="level-up-text">
               You reached Level {levelUpData.newLevel}!
             </p>
             <p className="level-up-subtext">Keep crushing it! 🎮</p>
+            <p className="level-up-dismiss">(Click anywhere to dismiss)</p>
           </div>
         </div>
       )}
