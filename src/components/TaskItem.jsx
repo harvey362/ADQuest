@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { playSound } from '../utils/soundEffects';
 import '../styles/taskitem.css';
 
 const TaskItem = ({ 
@@ -23,7 +24,15 @@ const TaskItem = ({
   const totalCount = task.subtasks.length;
   const progressPercent = totalCount > 0 ? Math.round((completedCount / totalCount) * 100) : 0;
   const isComplete = completedCount === totalCount && totalCount > 0;
-  
+
+  // Handle keyboard sounds
+  const handleKeyPress = (e) => {
+    // Only play sound for actual character keys, not modifiers
+    if (e.key.length === 1 || e.key === 'Backspace' || e.key === 'Delete') {
+      playSound('key');
+    }
+  };
+
   // Update timer display every second if speedrun active
   useEffect(() => {
     if (showTimer && timerData?.taskStartTime) {
@@ -209,6 +218,7 @@ const TaskItem = ({
                     value={editText}
                     onChange={(e) => setEditText(e.target.value)}
                     onKeyDown={(e) => {
+                      handleKeyPress(e);
                       if (e.key === 'Enter') saveEdit(subtask.id);
                       if (e.key === 'Escape') cancelEdit();
                     }}
@@ -273,6 +283,7 @@ const TaskItem = ({
                 value={newSubtaskText}
                 onChange={(e) => setNewSubtaskText(e.target.value)}
                 onKeyDown={(e) => {
+                  handleKeyPress(e);
                   if (e.key === 'Enter') handleAddSubtask();
                   if (e.key === 'Escape') {
                     setShowAddSubtask(false);

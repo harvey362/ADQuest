@@ -8,6 +8,11 @@
 
 # Production
 /build
+/dist
+
+# Electron
+*.log
+.electron-builder-cache
 
 # Misc
 .DS_Store
