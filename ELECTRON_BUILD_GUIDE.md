@@ -26,7 +26,17 @@ Before building, make sure you have:
    - `electron` - The desktop app framework
    - `electron-builder` - Tool to create installers
    - `concurrently`, `wait-on`, `cross-env` - Development helpers
-   - `electron-is-dev` - Detect development vs production
+
+3. **Configure Claude API Key (Optional but Recommended)**
+
+   To enable AI-powered task breakdown for end users:
+
+   - Open `src/services/aiService.js`
+   - Replace `'YOUR_API_KEY_HERE'` with your actual Anthropic API key
+   - **IMPORTANT:** See [API_KEY_GUIDE.md](API_KEY_GUIDE.md) for security warnings and setup instructions
+   - Make sure to set spending limits in your Anthropic dashboard first!
+
+   If you skip this step, the app will still work but will use generic mock task breakdowns instead of AI-generated ones.
 
 ## Development Mode
 
